@@ -1,90 +1,49 @@
 package com.example.prueba;
 
-        import android.app.NotificationChannel;
-        import android.app.NotificationManager;
-        import android.app.PendingIntent;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.media.RingtoneManager;
-        import android.net.Uri;
-        import android.os.Build;
-        import androidx.core.app.NotificationCompat;
-        import androidx.work.OneTimeWorkRequest;
-        import androidx.work.WorkManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.widget.RemoteViews;
 
-        import android.util.Log;
+import androidx.core.app.NotificationCompat;
 
-        import com.google.firebase.messaging.FirebaseMessagingService;
-        import com.google.firebase.messaging.RemoteMessage;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+import android.util.Log;
 
 
-/**
- * NOTE: There can only be one service in each app that receives FCM messages. If multiple
- * are declared in the Manifest then the first one will be chosen.
- *
- * In order to make this Java sample functional, you must remove the following from the Kotlin messaging
- * service in the AndroidManifest.xml:
- *
- * <intent-filter>
- *   <action android:name="com.google.firebase.MESSAGING_EVENT" />
- * </intent-filter>
- */
+
 public class FirebaseMessagingServ extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
 
-    /**
-     * Called when message is received.
-     *
-     * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
-     */
-    // [START receive_message]
-   /* @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        // [START_EXCLUDE]
-        // There are two types of messages data messages and notification messages. Data messages
-        // are handled
-        // here in onMessageReceived whether the app is in the foreground or background. Data
-        // messages are the type
-        // traditionally used with GCM. Notification messages are only received here in
-        // onMessageReceived when the app
-        // is in the foreground. When the app is in the background an automatically generated
-        // notification is displayed.
-        // When the user taps on the notification they are returned to the app. Messages
-        // containing both notification
-        // and data payloads are treated as notification messages. The Firebase console always
-        // sends notification
-        // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
-        // [END_EXCLUDE]
+    // Override onMessageReceived() method to extract the
+    // title and
+    // body from the message passed in FCM
+    @Override
+    public void
+    onMessageReceived(RemoteMessage remoteMessage) {
+        // First case when notifications are received via data event
+        // Here, 'title' and 'message' are the assumed names of JSON attributes.
+        // Since here we do not have any data payload, This section is commented out. It is here only for reference purposes.
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        /*if(remoteMessage.getData().size()>0){
+            showNotification(remoteMessage.getData().get("title"),
+                          remoteMessage.getData().get("message"));
+        }*/
 
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-            if (/* Check if data needs to be processed by long running job  true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-                handleNow();
-            }
-
-        }
-
-        // Check if message contains a notification payload.
+        // Second case when notification payload is received.
         if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            // Since the notification is received directly from FCM, the title and the body can be fetched directly as below.
+            showNotification(
+                    remoteMessage.getNotification().getTitle(),
+                    remoteMessage.getNotification().getBody());
         }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
-    // [END receive_message]
-*/
 
     // [START on_new_token]
     /**
@@ -105,26 +64,6 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
         // FCM registration token to your app server.
         sendRegistrationToServer(token);
     }
-    // [END on_new_token]
-
-    /**
-     * Schedule async work using WorkManager.
-
-    private void scheduleJob() {
-        // [START dispatch_job]
-        OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(MyWorker.class)
-                .build();
-        WorkManager.getInstance(this).beginWith(work).enqueue();
-        // [END dispatch_job]
-    }
-     */
-
-    /**
-     * Handle time allotted to BroadcastReceivers.
-     */
-    private void handleNow() {
-        Log.d(TAG, "Short lived task is done.");
-    }
 
     /**
      * Persist token to third-party servers.
@@ -138,41 +77,56 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
         // TODO: Implement this method to send token to your app server.
     }
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     *
-     * @param messageBody FCM message body received.
+    //Get the custom Design for notifications.
+    private RemoteViews getCustomDesign(String title, String message) {
+        RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.notification);
+        remoteViews.setTextViewText(R.id.title, title);
+        remoteViews.setTextViewText(R.id.message, message);
+        return remoteViews;
+    }
 
-    private void sendNotification(String messageBody) {
+    // Method to display the notifications
+    public void showNotification(String title, String message) {
+
+        // Pass the intent to switch to the MainActivity
         Intent intent = new Intent(this, MainActivity.class);
+
+        // Assign channel ID
+        String channel_id = "notification_channel";
+
+        //Clear activity from the bar
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        String channelId = getString(R.string.default_notification_channel_id);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_stat_ic_notification)
-                        .setContentTitle(getString(R.string.fcm_message))
-                        .setContentText(messageBody)
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
+        // Create a Builder object using NotificationCompat class. This will allow control over all the flags
+        NotificationCompat.Builder builder = new NotificationCompat
+                .Builder(getApplicationContext(), channel_id)
+                .setAutoCancel(true)
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                .setOnlyAlertOnce(true)
+                .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
+        // Custom design for the versions that support it, 4.1 and above. Default design for versions that cannot use it
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            builder = builder.setContent(getCustomDesign(title, message));
+        }
+        else {
+            builder = builder.setContentTitle(title).setContentText(message);
         }
 
-        notificationManager.notify(0 , notificationBuilder.build());
+        // Create an object of NotificationManager class to notify the user of events that happen in the background.
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Check if the Android Version is greater than Oreo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            NotificationChannel notificationChannel = new NotificationChannel(channel_id, "web_app", NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+        }
+
+        notificationManager.notify(0, builder.build());
     }
-    */
 }
+
 

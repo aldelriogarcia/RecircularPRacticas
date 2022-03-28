@@ -26,16 +26,15 @@ public class MainActivity extends AppCompatActivity {
 
         webView = (WebView) findViewById(R.id.webview);
 
-        //our app loads the site given in the URL
+        //Load the site in the URL
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("https://recircular.net/");
+        webView.loadUrl("https://dev.recircular.net/");
 
         //enables Javascript
         webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
                         if (!task.isSuccessful()) {
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
 
-                        // Get new FCM registration token
+                        // Get the FCM registration token
                         String token = task.getResult();
 
                         // Log and toast
