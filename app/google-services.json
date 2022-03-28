@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "707651739950",
-    "project_id": "recircular-87a5d",
-    "storage_bucket": "recircular-87a5d.appspot.com"
+    "project_number": "1031122848035",
+    "project_id": "recircular-c9426",
+    "storage_bucket": "recircular-c9426.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:707651739950:android:8cf93ddbc53c99ab3d5abf",
+        "mobilesdk_app_id": "1:1031122848035:android:b54f8e5ef083017be02496",
         "android_client_info": {
           "package_name": "com.example.prueba"
         }
       },
       "oauth_client": [
         {
-          "client_id": "707651739950-1q5ppqnm5mm5glh10fsk67mvnmrdtih0.apps.googleusercontent.com",
+          "client_id": "1031122848035-jduo0qta87pec3d7posc5sjupph6ib52.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDkQ83ajQ4eK8-VcHBmg3ovokt_SeM7nik"
+          "current_key": "AIzaSyCqSNVtONCQerjXlQSLeU2_KeQfB_n1dq0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "707651739950-1q5ppqnm5mm5glh10fsk67mvnmrdtih0.apps.googleusercontent.com",
+              "client_id": "1031122848035-jduo0qta87pec3d7posc5sjupph6ib52.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
