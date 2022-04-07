@@ -5,14 +5,17 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,10 +34,13 @@ public class MainActivity extends AppCompatActivity {
     private WebView webView;
     private WebSettings webSettings;
 
+    Button ajustes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ajustes = findViewById(R.id.ajustes);
 
         webView = (WebView) findViewById(R.id.webview);
 
@@ -47,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
         webView.loadUrl(url);
 
         webView.setWebViewClient(new WebViewClient());
+
+        ajustes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), Settings.class);
+                startActivity(intent);
+            }
+        });
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
