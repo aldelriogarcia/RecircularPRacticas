@@ -4,8 +4,11 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences prefs;
+        prefs = getSharedPreferences( "Prefs" , Context.MODE_PRIVATE);
+        Boolean check = prefs.getBoolean("notifs",false);
+        if(!check){
+            Log.d("Main Activity ","Preferencias "+check.toString()+" corta notificaciones");
+            NotificationManagerCompat.from(MainActivity.this).cancelAll();
+        }
+
+
         ajustes = findViewById(R.id.ajustes);
 
         webView = (WebView) findViewById(R.id.webview);

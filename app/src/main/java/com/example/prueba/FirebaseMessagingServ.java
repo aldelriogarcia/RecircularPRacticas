@@ -91,8 +91,9 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
 
         SharedPreferences prefs;
         prefs = getSharedPreferences( "Prefs" , Context.MODE_PRIVATE);
-
-        if(prefs.getBoolean("notifs",false)){
+        Boolean check = prefs.getBoolean("notifs",false);
+        Log.d("Servicio notificaciones"," Preferencias "+ check +" corta notificaciones");
+        if(check){
             // Pass the intent to switch to the MainActivity
             Intent intent = new Intent(this, MainActivity.class);
 

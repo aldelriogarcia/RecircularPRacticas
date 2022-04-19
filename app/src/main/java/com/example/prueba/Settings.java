@@ -6,6 +6,7 @@ import androidx.core.app.NotificationManagerCompat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -31,6 +32,8 @@ public class Settings extends AppCompatActivity {
         notificaciones = findViewById(R.id.notificaciones);
         back = findViewById(R.id.back);
 
+
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,14 +51,17 @@ public class Settings extends AppCompatActivity {
                     editor.commit();
                 } else {
 
-                    NotificationManagerCompat.from(Settings.this).cancelAll();
-
                     editor.putBoolean("notifs", false);
                     editor.commit();
+
+                    Boolean check = prefs.getBoolean("notifs",true);
+                    Log.d("Ajustes ","Preferencias "+ check +" corta notificaciones");
+                    NotificationManagerCompat.from(Settings.this).cancelAll();
                 }
             }
         });
 
+        notificaciones.setChecked(prefs.getBoolean("notifs",false));
 
     }
 }
