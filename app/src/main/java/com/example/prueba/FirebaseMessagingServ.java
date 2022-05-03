@@ -41,9 +41,37 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
         // Second case when notification payload is received.
         if (remoteMessage.getNotification() != null) {
             // Since the notification is received directly from FCM, the title and the body can be fetched directly as below.
-            showNotification(
+            SharedPreferences prefs;
+            prefs = getSharedPreferences( "Prefs" , Context.MODE_PRIVATE);
+            Boolean check = prefs.getBoolean("notifs",false);
+            Log.d("Servicio notificaciones"," Preferencias "+ check +" corta notificaciones");
+            if(check){
+                switch(remoteMessage.getNotification().getTitle()){
+                    case "Nuevo mensaje":
+                        check = prefs.getBoolean("Msgnotifs",false);
+                        break;
+
+                    case "Nueva publicación":
+                        check = prefs.getBoolean("Pubnotifs",false);
+
+                    case "Nuevo pedido":
+                        check = prefs.getBoolean("Ordernotifs",false);
+
+                    case "Nueva oferta":
+                        check = prefs.getBoolean("Offernotifs",false);
+                        break;
+                    default:
+                        showNotification(
+                                remoteMessage.getNotification().getTitle(),
+                                remoteMessage.getNotification().getBody());
+                }
+            }
+            else{
+                removeNotification(0);
+            }
+          /*  showNotification(
                     remoteMessage.getNotification().getTitle(),
-                    remoteMessage.getNotification().getBody());
+                    remoteMessage.getNotification().getBody());*/
         }
     }
 
@@ -90,29 +118,9 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
     // Method to display the notifications
     public void showNotification(String title, String message) {
 
-        SharedPreferences prefs;
-        prefs = getSharedPreferences( "Prefs" , Context.MODE_PRIVATE);
-        Boolean check = prefs.getBoolean("notifs",false);
-        Log.d("Servicio notificaciones"," Preferencias "+ check +" corta notificaciones");
-        if(check){
-            switch(title){
-                case "Nuevo mensaje":
-                    check = prefs.getBoolean("Msgnotifs",false);
-                    break;
 
-                case "Nueva publicación":
-                    check = prefs.getBoolean("Pubnotifs",false);
 
-                case "Nuevo pedido":
-                    check = prefs.getBoolean("Ordernotifs",false);
 
-                case "Nueva oferta":
-                    check = prefs.getBoolean("Offernotifs",false);
-                    break;
-            }
-        }
-
-        if (check) {
             // Pass the intent to switch to the MainActivity
             Intent intent = new Intent(this, MainActivity.class);
 
@@ -150,12 +158,6 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
             }
 
             notificationManager.notify(0, builder.build());
-        }
-        else{
-            removeNotification(0);
-        }
-
-
     }
 
     private void removeNotification(int id) {
