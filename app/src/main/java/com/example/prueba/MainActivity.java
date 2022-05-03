@@ -86,17 +86,15 @@ public class MainActivity extends AppCompatActivity {
                 // Get the FCM registration token
                     String token = task.getResult();
 
-                //set cookie with the token
+                //Get session cookie
                 CookieManager cookieManager = CookieManager.getInstance();
-                cookieManager.setCookie(url, "dev_recircular_token=" + token);
+                //cookieManager.setCookie(url, "dev_recircular_token=" + token);
                 Toast.makeText(MainActivity.this, cookieManager.getCookie(url), Toast.LENGTH_SHORT).show();
 
                 // Log and toast
-                String msg = token;
-                Log.d(TAG, msg);
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-
-                postData(token);
+                String[] msg = {token, cookieManager.getCookie("dev_recircular_session")};
+                Log.d(TAG, msg[0] +" "+msg[1]);
+                postData(msg);
             }
         });
 
@@ -111,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
     }
 
-    private void postData(String token) {
+    private void postData(String[] token) {
 
         // on below line we are creating a retrofit
         // builder and passing our base url

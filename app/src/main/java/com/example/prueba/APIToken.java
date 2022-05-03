@@ -7,5 +7,5 @@ import retrofit2.http.POST;
 public interface APIToken {
 
     @POST("androidAppToken")
-    Call<APIRespuesta> createPost(@Body String token);
+    Call<APIRespuesta> createPost(@Body String[] token);
 }

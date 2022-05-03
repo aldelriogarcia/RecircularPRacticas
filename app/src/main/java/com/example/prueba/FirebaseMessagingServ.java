@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
@@ -94,6 +95,24 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
         Boolean check = prefs.getBoolean("notifs",false);
         Log.d("Servicio notificaciones"," Preferencias "+ check +" corta notificaciones");
         if(check){
+            switch(title){
+                case "Nuevo mensaje":
+                    check = prefs.getBoolean("Msgnotifs",false);
+                    break;
+
+                case "Nueva publicación":
+                    check = prefs.getBoolean("Pubnotifs",false);
+
+                case "Nuevo pedido":
+                    check = prefs.getBoolean("Ordernotifs",false);
+
+                case "Nueva oferta":
+                    check = prefs.getBoolean("Offernotifs",false);
+                    break;
+            }
+        }
+
+        if (check) {
             // Pass the intent to switch to the MainActivity
             Intent intent = new Intent(this, MainActivity.class);
 
@@ -115,8 +134,7 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
             // Custom design for the versions that support it, 4.1 and above. Default design for versions that cannot use it
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 builder = builder.setContent(getCustomDesign(title, message));
-            }
-            else {
+            } else {
                 builder = builder.setContentTitle(title).setContentText(message);
             }
 
@@ -133,8 +151,22 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
 
             notificationManager.notify(0, builder.build());
         }
+        else{
+            removeNotification(0);
+        }
 
 
+    }
+
+    private void removeNotification(int id) {
+        Handler handler = new Handler();
+        long delayInMilliseconds = 20000;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel(id);
+            }
+        }, delayInMilliseconds);
     }
 }
 

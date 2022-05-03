@@ -17,7 +17,7 @@ public class Settings extends AppCompatActivity {
     Button back;
 
 
-    Switch notificaciones;
+    Switch notificaciones, mensajes, pedidos, publicaciones, ofertas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +30,10 @@ public class Settings extends AppCompatActivity {
 
 
         notificaciones = findViewById(R.id.notificaciones);
+        mensajes = findViewById(R.id.MsgNotif);
+        pedidos = findViewById(R.id.OrderNotif);
+        publicaciones = findViewById(R.id.PubNotif);
+        ofertas = findViewById(R.id.OfferNotif);
         back = findViewById(R.id.back);
 
 
@@ -63,5 +67,88 @@ public class Settings extends AppCompatActivity {
 
         notificaciones.setChecked(prefs.getBoolean("notifs",false));
 
+        mensajes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (mensajes.isChecked()) {
+
+
+                    editor.putBoolean("Msgnotifs", true);
+                    editor.commit();
+                } else {
+
+                    editor.putBoolean("Msgnotifs", false);
+                    editor.commit();
+
+                    Boolean check = prefs.getBoolean("Msgnotifs",true);
+                    Log.d("Ajustes ","Mensajes "+ check +" corta notificaciones");
+                }
+            }
+        });
+
+        mensajes.setChecked(prefs.getBoolean("Msgnotifs",false));
+
+        pedidos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (pedidos.isChecked()) {
+
+
+                    editor.putBoolean("Ordernotifs", true);
+                    editor.commit();
+                } else {
+
+                    editor.putBoolean("Ordernotifs", false);
+                    editor.commit();
+
+                    Boolean check = prefs.getBoolean("Ordernotifs",true);
+                    Log.d("Ajustes ","Pedidos "+ check +" corta notificaciones");
+                }
+            }
+        });
+
+        pedidos.setChecked(prefs.getBoolean("Ordernotifs",false));
+
+        ofertas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (ofertas.isChecked()) {
+
+
+                    editor.putBoolean("Offernotifs", true);
+                    editor.commit();
+                } else {
+
+                    editor.putBoolean("Offernotifs", false);
+                    editor.commit();
+
+                    Boolean check = prefs.getBoolean("Offernotifs",true);
+                    Log.d("Ajustes ","Ofertas "+ check +" corta notificaciones");
+                }
+            }
+        });
+
+        ofertas.setChecked(prefs.getBoolean("Offernotifs",false));
+
+        publicaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (publicaciones.isChecked()) {
+
+
+                    editor.putBoolean("Pubnotifs", true);
+                    editor.commit();
+                } else {
+
+                    editor.putBoolean("Pubnotifs", false);
+                    editor.commit();
+
+                    Boolean check = prefs.getBoolean("Pubnotifs",true);
+                    Log.d("Ajustes ","Publicaciones "+ check +" corta notificaciones");
+                }
+            }
+        });
+
+        publicaciones.setChecked(prefs.getBoolean("Pubnotifs",false));
     }
 }
