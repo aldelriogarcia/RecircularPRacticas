@@ -82,6 +82,7 @@ public class Settings extends AppCompatActivity {
 
                     Boolean check = prefs.getBoolean("Msgnotifs",true);
                     Log.d("Ajustes ","Mensajes "+ check +" corta notificaciones");
+                   
                 }
             }
         });

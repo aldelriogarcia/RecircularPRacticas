@@ -49,17 +49,52 @@ public class FirebaseMessagingServ extends FirebaseMessagingService {
                 switch(remoteMessage.getNotification().getTitle()){
                     case "Nuevo mensaje":
                         check = prefs.getBoolean("Msgnotifs",false);
+                        if(check){
+                            showNotification(
+                                    remoteMessage.getNotification().getTitle(),
+                                    remoteMessage.getNotification().getBody());
+                        }
+                        else{
+                            removeNotification(0);
+                        }
                         break;
 
                     case "Nueva publicación":
                         check = prefs.getBoolean("Pubnotifs",false);
+                        if(check){
+                            showNotification(
+                                    remoteMessage.getNotification().getTitle(),
+                                    remoteMessage.getNotification().getBody());
+                        }
+                        else{
+                            removeNotification(0);
+                        }
+                        break;
 
                     case "Nuevo pedido":
                         check = prefs.getBoolean("Ordernotifs",false);
+                        if(check){
+                            showNotification(
+                                    remoteMessage.getNotification().getTitle(),
+                                    remoteMessage.getNotification().getBody());
+                        }
+                        else{
+                            removeNotification(0);
+                        }
+                        break;
 
                     case "Nueva oferta":
                         check = prefs.getBoolean("Offernotifs",false);
+                        if(check){
+                            showNotification(
+                                    remoteMessage.getNotification().getTitle(),
+                                    remoteMessage.getNotification().getBody());
+                        }
+                        else{
+                            removeNotification(0);
+                        }
                         break;
+
                     default:
                         showNotification(
                                 remoteMessage.getNotification().getTitle(),
